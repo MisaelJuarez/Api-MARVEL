@@ -1,21 +1,21 @@
 // npm i jsonwebtoken bcryptjs
 import { Router } from 'express';
-import { actualizar_usuario, consulta_usuario, consulta_usuario_individual, eliminar_usuario, insercion_usuario, registro_usuario, iniciar_sesion } from '../controllers/Usuarios.controller.js';
+import { actualizar_usuario, consulta_usuario, consulta_usuario_individual, eliminar_usuario, registro_usuario, iniciar_sesion, manejar_estado } from '../controllers/Usuarios.controller.js';
 import { actualizar_vengador, consulta_vengadores, consulta_vengador_individual, eliminar_vengador, insercion_vengador } from '../controllers/Vengadores.controller.js';
 import { actualizar_xmen, consulta_xmen, consulta_xmen_individual, eliminar_xmen, insercion_xmen } from '../controllers/Xmen.controller.js';
 import { actualizar_guardian, consulta_guardian_individual, consulta_guardianes, eliminar_guardian, insercion_guardian } from '../controllers/Guardianes.controller.js';
 import authMiddleware from '../config/authMiddleware.js';
+import { cargar_imagen } from '../controllers/Archivo.controller.js';
 
 const router = Router();
 
+router.get("/usuarios/:nombre",consulta_usuario);
 router.get("/usuario/:nombre",consulta_usuario_individual);
-router.post("/insercion_usuario/",insercion_usuario);
+router.post("/registro/:rol",registro_usuario);
+router.post("/login/",iniciar_sesion);
 router.put("/actualizar_usuario/:nombre",actualizar_usuario);
 router.delete("/eliminar_usuario/:nombre",eliminar_usuario);
-
-router.get("/usuarios",consulta_usuario);
-router.post("/registro/",registro_usuario);
-router.post("/login/",iniciar_sesion);
+router.put("/manejar_estado/:nombre", manejar_estado)
 
 router.get("/vengadores",consulta_vengadores);
 router.get("/vengadores/:nombre",consulta_vengador_individual);
@@ -35,7 +35,7 @@ router.post("/guardianes/insercion/",authMiddleware,insercion_guardian);
 router.put("/guardianes/actualizar/:superheroe",authMiddleware,actualizar_guardian);
 router.delete("/guardianes/eliminar/:superheroe",authMiddleware,eliminar_guardian);
 
-
+router.post('/archivo/descargar',cargar_imagen);
 
 router.use((req,res) => {
     res.status(404).json({

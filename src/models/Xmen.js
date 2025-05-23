@@ -6,7 +6,8 @@ const marvelModelo = new mongoose.Schema({
     poder: { type: "String", required: true },
     categoria: { type: "String", required: true },
     nivel_amenaza: { type: "String", required: true },
-    url: {type: "String", require: true}
+    url: {type: "String", require: true},
+    biografia:{type:"String",require:true},
     }, 
     { collection: 'xmen' } //forzamos el nombre de la colección
 ); 

@@ -21,15 +21,18 @@ const consulta_xmen_individual = async (req,res) => {
 
 const insercion_xmen = async (req,res) => {
     try {
-        const {alias,nombre,poder,categoria,nivel_amenaza,url} = req.body;
-        if(res.user.rol !== 1) return res.status(403).json({"msj":"No tienes permisos para efectuar esta accion"}); 
+        const {alias,nombre,poder,categoria,nivel_amenaza,url,biografia} = req.body;
+        if(res.user.rol !== 1) return res.status(403).json({"msj":"No tienes permisos para efectuar esta accion","icon":"warning"}); 
 
-        if (alias == "" || nombre == "" || poder == "" || categoria == "" || nivel_amenaza == "" || url == "") {
-            res.json({"msj":"No puedes dejar campos vacios"})
+        const verificarSuperheroe = await Xmen.findOne({"alias":alias});
+        if(verificarSuperheroe) return res.status(403).json({"msj":"Este personaje ya fue agregado","icon":"warning"}); 
+
+        if (alias == "" || nombre == "" || poder == "" || categoria == "" || nivel_amenaza == "" || url == "" || biografia == "") {
+            res.json({"msj":"No puedes dejar campos vacios","icon":"info"})
         }else {
-            const superNuevo = new Xmen({"alias":alias,"nombre":nombre,"poder":poder,"categoria":categoria,"nivel_amenaza":nivel_amenaza,"url":url});
+            const superNuevo = new Xmen({"alias":alias,"nombre":nombre,"poder":poder,"categoria":categoria,"nivel_amenaza":nivel_amenaza,"url":url,"biografia":biografia});
             superNuevo.save();
-            res.status(201).json(superNuevo);
+            res.status(201).json({"msj":"Superheroe agregado","icon":"success"});
         }
     } catch (error) {
         res.status(500).json({"error":error})
@@ -38,18 +41,18 @@ const insercion_xmen = async (req,res) => {
 
 const actualizar_xmen = async (req, res) => {
     try {
-        const {alias,nombre,poder,categoria,nivel_amenaza,url} = req.body;
-        if(res.user.rol !== 1) return res.status(403).json({"msj":"No tienes permisos para efectuar esta accion"}); 
+        const {alias,nombre,poder,categoria,nivel_amenaza,url,biografia} = req.body;
+        if(res.user.rol !== 1) return res.status(403).json({"msj":"No tienes permisos para efectuar esta accion","icon":"warning"}); 
 
         const superParam = req.params.superheroe;
         let superheroe = await Xmen.findOne({"alias":superParam});
         if (superheroe) {
-            await Xmen.updateOne({"alias":superParam},{$set: {"alias":alias,"nombre":nombre,"poder":poder,"categoria":categoria,"nivel_amenaza":nivel_amenaza,"url":url}});
-            return res.status(200).json({"msj": "Actualización correcta"});
+            await Xmen.updateOne({"alias":superParam},{$set: {"alias":alias,"nombre":nombre,"poder":poder,"categoria":categoria,"nivel_amenaza":nivel_amenaza,"url":url,"biografia":biografia,"biografia":biografia}});
+            return res.status(200).json({"msj": "Actualización correcta","icon":"success"});
         } else {
-            const nuevoSuper = new Xmen({"alias":alias,"nombre":nombre,"poder":poder,"categoria":categoria,"nivel_amenaza":nivel_amenaza,"url":url});
+            const nuevoSuper = new Xmen({"alias":alias,"nombre":nombre,"poder":poder,"categoria":categoria,"nivel_amenaza":nivel_amenaza,"url":url,"biografia":biografia,"biografia":biografia});
             await nuevoSuper.save();
-            return res.status(201).json({ msj: "El superheroe no existe pero se ha creado uno nuevo" });
+            return res.status(201).json({"msj":"El superheroe no existe pero se ha creado uno nuevo","icon":"info"});
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -58,14 +61,14 @@ const actualizar_xmen = async (req, res) => {
 
 const eliminar_xmen = async (req,res) => {
     try {
-        if(res.user.rol !== 1) return res.status(403).json({"msj":"No tienes permisos para efectuar esta accion"}); 
+        if(res.user.rol !== 1) return res.status(403).json({"msj":"No tienes permisos para efectuar esta accion","icon":"warning"}); 
         let superheroe = req.params.superheroe;
         let superbuscar = await Xmen.findOne({"alias":superheroe});
         if (superbuscar) {
             await Xmen.deleteOne({"alias":superheroe});
-            res.status(201).json({"msj":"Superheroe eliminado"})
+            res.status(201).json({"msj":"Superheroe eliminado","icon":"success"})
         }else {
-            res.json({"msj":"Superheroe no existe"})
+            res.json({"msj":"Superheroe no existe","icon":"error"})
         }
     } catch (error) {
         res.status(500).json({"error":error})

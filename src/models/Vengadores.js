@@ -7,6 +7,7 @@ const marvelModelo = new mongoose.Schema({
     categoria:{type:"String",require:true},
     nivel_amenaza:{type:"String",require:true},
     url:{type:"String",require:true},
+    biografia:{type:"String",require:true},
 });
 
 export default mongoose.model('vengadores',marvelModelo);
