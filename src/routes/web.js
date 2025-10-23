@@ -1,6 +1,6 @@
 // npm i jsonwebtoken bcryptjs
 import { Router } from 'express';
-import { actualizar_usuario, consulta_usuario, consulta_usuario_individual, eliminar_usuario, registro_usuario, iniciar_sesion, manejar_estado } from '../controllers/Usuarios.controller.js';
+import {  obtener_usuario,actualizar_usuario, consulta_usuario, consulta_usuario_individual, eliminar_usuario, registro_usuario, iniciar_sesion, manejar_estado } from '../controllers/Usuarios.controller.js';
 import { actualizar_vengador, consulta_vengadores, consulta_vengador_individual, eliminar_vengador, insercion_vengador } from '../controllers/Vengadores.controller.js';
 import { actualizar_xmen, consulta_xmen, consulta_xmen_individual, eliminar_xmen, insercion_xmen } from '../controllers/Xmen.controller.js';
 import { actualizar_guardian, consulta_guardian_individual, consulta_guardianes, eliminar_guardian, insercion_guardian } from '../controllers/Guardianes.controller.js';
@@ -9,6 +9,7 @@ import { cargar_imagen } from '../controllers/Archivo.controller.js';
 
 const router = Router();
 
+router.get("/obtener_usuario/",obtener_usuario);
 router.get("/usuarios/:nombre",consulta_usuario);
 router.get("/usuario/:nombre",consulta_usuario_individual);
 router.post("/registro/:rol",registro_usuario);

@@ -61,6 +61,14 @@ const consulta_usuario = async (req,res) => {
         res.status(500).json({"error":error})
     }
 }
+const obtener_usuario = async (req,res) => {
+    try {
+        const usuarios = await Usuarios.find();
+        res.json(usuarios)
+    } catch (error) {
+        res.status(500).json({"error":error})
+    }
+}
 
 const consulta_usuario_individual = async (req,res) => {
     try {
@@ -125,4 +133,4 @@ const manejar_estado = async (req,res) => {
     }
 }
 
-export {consulta_usuario, consulta_usuario_individual, actualizar_usuario, eliminar_usuario, registro_usuario, iniciar_sesion, manejar_estado};
+export {obtener_usuario ,consulta_usuario, consulta_usuario_individual, actualizar_usuario, eliminar_usuario, registro_usuario, iniciar_sesion, manejar_estado};
